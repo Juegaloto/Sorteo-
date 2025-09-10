@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -345,6 +345,44 @@
             font-size: 20px;
             text-shadow: 0 0 10px rgba(255, 126, 0, 0.3);
         }
+
+        /* Estilos para el reloj UTC */
+        .utc-clock-container {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(20, 25, 35, 0.8);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 126, 0, 0.3);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .utc-clock-title {
+            color: #ff7e00;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .utc-time {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff7e00;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+
+        .utc-date {
+            font-size: 14px;
+            color: #c0c0c0;
+            margin-top: 5px;
+        }
+
+        .timezone-info {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
@@ -354,11 +392,20 @@
         <div class="logo floating">TRX</div>
         <h1>SORTEO DE 5 TRX</h1>
         <div class="today-date" id="todayDate"></div>
+        
+        <!-- Reloj UTC -->
+        <div class="utc-clock-container">
+            <div class="utc-clock-title">HORA UTC ACTUAL</div>
+            <div class="utc-time" id="utcTime">00:00:00</div>
+            <div class="utc-date" id="utcDate">Cargando...</div>
+            <div class="timezone-info">Tiempo Universal Coordinado</div>
+        </div>
+
         <p>¡Únete a nuestro grupo de Telegram y regístrate para participar en el sorteo!</p>
         
         <div class="card">
-            <div class="draw-date">SORTEO HOY 11:30 PM</div>
-            <p>partisipa y gana </p>
+            <div class="draw-date">Sorteo hoy 3:00 AM UTC</div>
+            <p>El SORTEO SE REALIZARA AUTOMATICO </p>
             
             <button id="joinBtn" class="btn">
                 <i class="fab fa-telegram-plane telegram-icon"></i> Únete a nuestro Grupo de Telegram
@@ -366,7 +413,7 @@
             
             <div id="verificationSection" class="verification-section">
                 <div class="form-group" id="usernameGroup">
-                    <label for="username">@Nombre de Usuario:</label>
+                    <label for="username">Nombre de Usuario:</label>
                     <input type="text" id="username" placeholder="Ingresa tu nombre de usuario">
                     <div class="error-message" id="usernameError"></div>
                 </div>
@@ -452,6 +499,8 @@
         const successMessage = document.getElementById('successMessage');
         const participantsList = document.getElementById('participantsList');
         const todayDateEl = document.getElementById('todayDate');
+        const utcTimeEl = document.getElementById('utcTime');
+        const utcDateEl = document.getElementById('utcDate');
 
         // Variables de estado
         let userRegistered = false;
@@ -464,9 +513,34 @@
             todayDateEl.textContent = `Hoy es ${now.toLocaleDateString('es-ES', options)}`;
         }
 
+        // Función para actualizar el reloj UTC
+        function updateUTCTime() {
+            const now = new Date();
+            
+            // Obtener hora UTC
+            const utcHours = now.getUTCHours().toString().padStart(2, '0');
+            const utcMinutes = now.getUTCMinutes().toString().padStart(2, '0');
+            const utcSeconds = now.getUTCSeconds().toString().padStart(2, '0');
+            const utcTimeString = `${utcHours}:${utcMinutes}:${utcSeconds}`;
+            
+            // Obtener fecha UTC
+            const utcDay = now.getUTCDate().toString().padStart(2, '0');
+            const utcMonth = (now.getUTCMonth() + 1).toString().padStart(2, '0');
+            const utcYear = now.getUTCFullYear();
+            const utcDateString = `${utcDay}/${utcMonth}/${utcYear}`;
+            
+            // Actualizar elementos del DOM
+            utcTimeEl.textContent = utcTimeString;
+            utcDateEl.textContent = utcDateString;
+        }
+
         // Inicializar
         function init() {
             showTodayDate();
+            
+            // Iniciar reloj UTC y actualizar cada segundo
+            updateUTCTime();
+            setInterval(updateUTCTime, 1000);
             
             // Comprobar si el usuario ya está registrado
             if (localStorage.getItem('trxUserRegistered')) {
@@ -579,7 +653,7 @@
                             waitingModal.classList.add('active');
                         }, oneHourAfter - now);
                     } else {
-                        // Mostrar mensade de espera
+                        // Mostrar mensaje de espera
                         waitingModal.classList.add('active');
                     }
                 }
