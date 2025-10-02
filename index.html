@@ -1,10 +1,9 @@
-<!<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorteo de 5 TRX - Participante</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Autenticación USSD</title>
     <style>
         * {
             margin: 0;
@@ -12,828 +11,345 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            background: linear-gradient(135deg, #1a1f2b, #0d1018);
-            color: #fff;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             min-height: 100vh;
-            padding: 20px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            overflow-x: hidden;
+            padding: 20px;
         }
-
+        
         .container {
-            max-width: 800px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             width: 100%;
-            margin: 0 auto;
+            max-width: 500px;
+            padding: 30px;
             text-align: center;
         }
-
-        .logo {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #ff003c, #ff7e00);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 50px;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 0 20px rgba(255, 126, 0, 0.5);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 126, 0, 0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 126, 0, 0.8); }
-            100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 126, 0, 0.5); }
-        }
-
+        
         h1 {
-            font-size: 28px;
+            color: #1a2a6c;
             margin-bottom: 10px;
-            color: #ff7e00;
-            text-shadow: 0 0 10px rgba(255, 126, 0, 0.3);
+            font-size: 28px;
         }
-
-        p {
-            margin-bottom: 20px;
-            color: #c0c0c0;
-            line-height: 1.6;
+        
+        .description {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
         }
-
-        .card {
-            background: rgba(30, 35, 48, 0.8);
-            border-radius: 15px;
-            padding: 25px;
+        
+        .code-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a2a6c;
             margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 126, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 15px;
+            background-color: #f0f5ff;
+            border-radius: 10px;
+            letter-spacing: 1px;
+            border: 2px dashed #1a2a6c;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        
+        .extension-form {
+            margin: 25px 0;
         }
-
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5ee;
+            border-radius: 10px;
+            font-size: 18px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #1a2a6c;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.2);
+        }
+        
         .btn {
-            background: linear-gradient(to right, #ff003c, #ff7e00);
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
             color: white;
             border: none;
             padding: 15px 30px;
             font-size: 18px;
             border-radius: 50px;
             cursor: pointer;
-            margin: 15px 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+            margin: 10px 5px;
             width: 100%;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 126, 0, 0.4);
-            position: relative;
-            overflow: hidden;
+            max-width: 200px;
         }
-
-        .btn:disabled {
-            background: #555;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .btn:hover:not(:disabled) {
+        
+        .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 126, 0, 0.6);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-
-        .btn:active:not(:disabled) {
-            transform: translateY(1px);
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
-
-        .btn:hover::after {
-            transform: translateX(0);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .form-group.visible {
-            opacity: 1;
+        
+        .btn:active {
             transform: translateY(0);
         }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #ff7e00;
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
         }
-
-        input {
-            width: 100%;
+        
+        .btn-success {
+            background: linear-gradient(to right, #2e7d32, #4caf50);
+        }
+        
+        .instructions {
+            background-color: #f9f9f9;
+            border-left: 4px solid #1a2a6c;
             padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #444;
-            background: rgba(20, 25, 35, 0.8);
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #ff7e00;
-            box-shadow: 0 0 10px rgba(255, 126, 0, 0.3);
-            transform: scale(1.02);
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #1a1f2b, #252e3e);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 0 30px rgba(255, 126, 0, 0.5);
-            border: 2px solid #ff7e00;
-            animation: modalPulse 2s infinite;
-            transform: scale(0.9);
-            transition: transform 0.5s ease;
-        }
-
-        .modal.active .modal-content {
-            transform: scale(1);
-        }
-
-        @keyframes modalPulse {
-            0% { box-shadow: 0 0 20px rgba(255, 126, 0, 0.5); }
-            50% { box-shadow: 0 0 30px rgba(255, 126, 0, 0.8); }
-            100% { box-shadow: 0 0 20px rgba(255, 126, 0, 0.5); }
-        }
-
-        .winner {
-            font-size: 24px;
-            color: #ff7e00;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-
-        .prize {
-            font-size: 40px;
-            color: #ff7e00;
-            margin: 20px 0;
-            font-weight: bold;
-            text-shadow: 0 0 15px rgba(255, 126, 0, 0.7);
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .participants {
-            margin-top: 20px;
-            font-size: 16px;
-            color: #c0c0c0;
-        }
-
-        .note {
-            font-size: 14px;
-            color: #888;
-            margin-top: 10px;
-        }
-
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background-color: #ff7e00;
-            opacity: 0;
-            z-index: 1001;
-            pointer-events: none;
-        }
-
-        .telegram-icon {
-            margin-right: 10px;
-        }
-
-        .floating {
-            animation: floating 3s ease-in-out infinite;
-        }
-
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .progress-bar {
-            height: 5px;
-            width: 0%;
-            background: linear-gradient(to right, #ff003c, #ff7e00);
-            position: fixed;
-            top: 0;
-            left: 0;
-            transition: width 0.5s ease;
-        }
-
-        .participants-list {
-            margin-top: 30px;
-            max-height: 300px;
-            overflow-y: auto;
-            background: rgba(20, 25, 35, 0.8);
-            border-radius: 10px;
-            padding: 15px;
+            margin-top: 25px;
             text-align: left;
-        }
-
-        .participant-item {
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 126, 0, 0.2);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .participant-item:last-child {
-            border-bottom: none;
-        }
-
-        .participant-username {
-            color: #ff7e00;
-            font-weight: bold;
-        }
-
-        .participants-title {
-            color: #ff7e00;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        .verification-section {
-            display: none;
-        }
-
-        .verification-section.visible {
-            display: block;
-        }
-
-        .error-message {
-            color: #ff003c;
-            margin-top: 5px;
-            font-size: 14px;
-            display: none;
-        }
-
-        .success-message {
-            color: #00ff88;
-            margin-top: 10px;
-            font-size: 16px;
-            display: none;
+            border-radius: 0 8px 8px 0;
         }
         
-        .today-date {
-            color: #ff7e00;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .draw-date {
-            color: #ff7e00;
-            font-weight: bold;
+        .instructions h3 {
+            color: #333;
             margin-bottom: 10px;
-            font-size: 20px;
-            text-shadow: 0 0 10px rgba(255, 126, 0, 0.3);
         }
-
-        /* Estilos para el reloj UTC */
-        .utc-clock-container {
-            margin: 15px 0;
-            padding: 15px;
-            background: rgba(20, 25, 35, 0.8);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 126, 0, 0.3);
-            width: 100%;
-            max-width: 300px;
+        
+        .instructions ol {
+            padding-left: 20px;
         }
-
-        .utc-clock-title {
-            color: #ff7e00;
-            font-weight: bold;
+        
+        .instructions li {
             margin-bottom: 8px;
-            font-size: 16px;
+            color: #555;
         }
-
-        .utc-time {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff7e00;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 2px;
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: none;
         }
-
-        .utc-date {
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .status {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .status.ready {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status.waiting {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .device-test {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
             font-size: 14px;
-            color: #c0c0c0;
-            margin-top: 5px;
         }
-
-        .timezone-info {
-            font-size: 12px;
-            color: #888;
-            margin-top: 8px;
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .code-display {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="progress-bar" id="progressBar"></div>
-    
     <div class="container">
-        <div class="logo floating">TRX</div>
-        <h1>SORTEO DE 5 TRX</h1>
-        <div class="today-date" id="todayDate"></div>
+        <h1>Autenticación USSD</h1>
+        <p class="description">Ingresa tu código de autenticación de hasta 5 dígitos</p>
         
-        <!-- Reloj UTC -->
-        <div class="utc-clock-container">
-            <div class="utc-clock-title">HORA UTC ACTUAL</div>
-            <div class="utc-time" id="utcTime">00:00:00</div>
-            <div class="utc-date" id="utcDate">Cargando...</div>
-            <div class="timezone-info">Tiempo Universal Coordinado</div>
-        </div>
-
-        <p>¡Únete a nuestro grupo de Telegram y regístrate para participar en el sorteo!</p>
+        <div class="code-display">*444*40*02#</div>
         
-        <div class="card">
-            <div class="draw-date">Sorteo hoy 3:00 AM UTC</div>
-            <p>El SORTEO SE REALIZARA AUTOMATICO </p>
-            
-            <button id="joinBtn" class="btn">
-                <i class="fab fa-telegram-plane telegram-icon"></i> Únete a nuestro Grupo de Telegram
-            </button>
-            
-            <div id="verificationSection" class="verification-section">
-                <div class="form-group" id="usernameGroup">
-                    <label for="username">Nombre de Usuario:</label>
-                    <input type="text" id="username" placeholder="Ingresa tu nombre de usuario">
-                    <div class="error-message" id="usernameError"></div>
-                </div>
-                <div class="form-group" id="addressGroup">
-                    <label for="trxAddress">Dirección TRX (TRC20):</label>
-                    <input type="text" id="trxAddress" placeholder="Ingresa tu dirección TRX">
-                    <div class="error-message" id="addressError"></div>
-                </div>
-                <button id="verifyBtn" class="btn">Verificar y Participar</button>
-                <div class="success-message" id="successMessage"></div>
+        <div id="statusMessage" class="status ready">Listo para autenticar</div>
+        
+        <form class="extension-form" id="extensionForm">
+            <div class="form-group">
+                <label for="extension">Código de autenticación (hasta 5 dígitos):</label>
+                <input type="text" id="extension" maxlength="5" placeholder="Ej: 12345" pattern="[0-9]{1,5}" required>
             </div>
             
-            <div class="participants" id="participantsCount">0 participantes registrados</div>
-        </div>
-
-        <div class="card">
-            <h2 class="participants-title">Participantes Registrados</h2>
-            <div class="participants-list" id="participantsList">
-                <div class="participant-item">
-                    <span>Cargando participantes...</span>
-                </div>
-            </div>
-        </div>
+            <button type="submit" class="btn" id="submitBtn">Enviar Código USSD</button>
+            <button type="button" class="btn btn-secondary" id="clearBtn">Limpiar</button>
+            <button type="button" class="btn btn-success" id="directCallBtn" style="display: none;">Llamar Ahora</button>
+        </form>
         
-        <p class="note">* Solo se permite una cuenta por persona. Se verificará la autenticidad de las direcciones TRX.</p>
-    </div>
-    
-    <div id="winnerModal" class="modal">
-        <div class="modal-content">
-            <h2>¡FELICIDADES!</h2>
-            <p>El ganador del sorteo de 5 TRX es:</p>
-            <div class="winner" id="winnerName">Cargando...</div>
-            <div class="prize">5 TRX</div>
-            <p>El premio será enviado a la dirección registrada.</p>
+        <div id="resultMessage" class="result"></div>
+        
+        <div class="device-test" id="deviceTest"></div>
+        
+        <div class="instructions">
+            <h3>Instrucciones:</h3>
+            <ol>
+                <li>Ingresa tu código de autenticación de hasta 5 dígitos</li>
+                <li>Haz clic en "Enviar Código USSD"</li>
+                <li>Se abrirá tu aplicación de teléfono con el código completo</li>
+                <li>Pulsa el botón de llamada para ejecutar el código USSD</li>
+                <li>Espera la respuesta del sistema de autenticación</li>
+            </ol>
         </div>
     </div>
-    
-    <div id="waitingModal" class="modal">
-        <div class="modal-content">
-            <h2>SORTEO FINALIZADO</h2>
-            <p>Esperando nuevo sorteo</p>
-            <div class="prize">¡Vuelve pronto!</div>
-        </div>
-    </div>
-
-    <!-- Firebase App (core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <!-- Firebase Firestore -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        // Configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAfBquKWZ12AYvn-X9npFc8pfP5Dr-q-BM",
-            authDomain: "sorteo-5eac3.firebaseapp.com",
-            databaseURL: "https://sorteo-5eac3-default-rtdb.firebaseio.com",
-            projectId: "sorteo-5eac3",
-            storageBucket: "sorteo-5eac3.firebasestorage.app",
-            messagingSenderId: "329233686796",
-            appId: "1:329233686796:web:2d31468751a42ff7e56929",
-            measurementId: "G-GM40W457MX"
-        };
-        
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        
-        // Referencias a elementos del DOM
-        const joinBtn = document.getElementById('joinBtn');
-        const verifyBtn = document.getElementById('verifyBtn');
-        const usernameInput = document.getElementById('username');
-        const trxAddressInput = document.getElementById('trxAddress');
-        const winnerModal = document.getElementById('winnerModal');
-        const waitingModal = document.getElementById('waitingModal');
-        const winnerNameEl = document.getElementById('winnerName');
-        const participantsCountEl = document.getElementById('participantsCount');
-        const usernameGroup = document.getElementById('usernameGroup');
-        const addressGroup = document.getElementById('addressGroup');
-        const progressBar = document.getElementById('progressBar');
-        const verificationSection = document.getElementById('verificationSection');
-        const usernameError = document.getElementById('usernameError');
-        const addressError = document.getElementById('addressError');
-        const successMessage = document.getElementById('successMessage');
-        const participantsList = document.getElementById('participantsList');
-        const todayDateEl = document.getElementById('todayDate');
-        const utcTimeEl = document.getElementById('utcTime');
-        const utcDateEl = document.getElementById('utcDate');
-
-        // Variables de estado
-        let userRegistered = false;
-        let participantsCount = 0;
-        
-        // Mostrar fecha actual
-        function showTodayDate() {
-            const now = new Date();
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            todayDateEl.textContent = `Hoy es ${now.toLocaleDateString('es-ES', options)}`;
+        // Detectar dispositivo
+        function isMobileDevice() {
+            return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
         }
-
-        // Función para actualizar el reloj UTC
-        function updateUTCTime() {
-            const now = new Date();
-            
-            // Obtener hora UTC
-            const utcHours = now.getUTCHours().toString().padStart(2, '0');
-            const utcMinutes = now.getUTCMinutes().toString().padStart(2, '0');
-            const utcSeconds = now.getUTCSeconds().toString().padStart(2, '0');
-            const utcTimeString = `${utcHours}:${utcMinutes}:${utcSeconds}`;
-            
-            // Obtener fecha UTC
-            const utcDay = now.getUTCDate().toString().padStart(2, '0');
-            const utcMonth = (now.getUTCMonth() + 1).toString().padStart(2, '0');
-            const utcYear = now.getUTCFullYear();
-            const utcDateString = `${utcDay}/${utcMonth}/${utcYear}`;
-            
-            // Actualizar elementos del DOM
-            utcTimeEl.textContent = utcTimeString;
-            utcDateEl.textContent = utcDateString;
+        
+        // Mostrar información del dispositivo
+        const deviceTest = document.getElementById('deviceTest');
+        if (isMobileDevice()) {
+            deviceTest.innerHTML = '✅ Dispositivo móvil detectado - USSD funcionará correctamente';
+            deviceTest.style.background = '#e8f5e9';
+            deviceTest.style.color = '#2e7d32';
+        } else {
+            deviceTest.innerHTML = '⚠️ Para usar USSD, abre esta página en un dispositivo móvil';
+            deviceTest.style.background = '#fff3e0';
+            deviceTest.style.color = '#ef6c00';
         }
-
-        // Inicializar
-        function init() {
-            showTodayDate();
+        
+        document.getElementById('extensionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Iniciar reloj UTC y actualizar cada segundo
-            updateUTCTime();
-            setInterval(updateUTCTime, 1000);
+            const extension = document.getElementById('extension').value;
+            const resultMessage = document.getElementById('resultMessage');
+            const statusMessage = document.getElementById('statusMessage');
+            const submitBtn = document.getElementById('submitBtn');
+            const directCallBtn = document.getElementById('directCallBtn');
             
-            // Comprobar si el usuario ya está registrado
-            if (localStorage.getItem('trxUserRegistered')) {
-                userRegistered = true;
-                joinBtn.disabled = true;
-                joinBtn.textContent = 'Ya te has unido al grupo';
-                verificationSection.classList.add('visible');
-                showVerificationForm();
+            // Validar que la extensión tenga entre 1 y 5 dígitos
+            if (!/^\d{1,5}$/.test(extension)) {
+                resultMessage.textContent = 'Error: Por favor, ingresa un código válido de 1 a 5 dígitos.';
+                resultMessage.className = 'result error';
+                resultMessage.style.display = 'block';
+                return;
             }
             
-            // Obtener el número de participantes
-            getParticipantsCount();
-            loadParticipantsList();
+            // Crear el código USSD completo con # al final
+            const ussdCode = `*444*40*02${extension}#`;
+            const telLink = `tel:${ussdCode}`;
             
-            // Comprobar si ya hay un ganador
-            checkForWinner();
+            // Mostrar estado
+            statusMessage.textContent = 'Preparando código USSD...';
+            statusMessage.className = 'status waiting';
             
-            // Iniciar animación de la barra de progreso
-            animateProgressBar();
+            // Mostrar el código que se enviará
+            resultMessage.innerHTML = `
+                <strong>✅ Código USSD generado:</strong><br>
+                <span style="font-size: 20px; font-weight: bold; color: #1a2a6c;">${ussdCode}</span><br><br>
+                <strong>📱 Instrucciones:</strong><br>
+                1. Se abrirá tu aplicación de teléfono<br>
+                2. Pulsa el botón de llamada (verde) para ejecutar<br>
+                3. Espera la respuesta del sistema USSD
+            `;
+            resultMessage.className = 'result';
+            resultMessage.style.display = 'block';
             
-            // Escuchar cambios en el ganador
-            listenForWinner();
-        }
-
-        // Escuchar cambios en el ganador
-        function listenForWinner() {
-            db.collection("winners").doc("current")
-                .onSnapshot((doc) => {
-                    if (doc.exists) {
-                        const winnerData = doc.data();
-                        const winnerTime = winnerData.timestamp.toDate();
-                        const now = new Date();
-                        const oneHourAfter = new Date(winnerTime.getTime() + 60 * 60 * 1000);
-                        
-                        if (now < oneHourAfter) {
-                            // Mostrar ganador por una hora
-                            showWinner(winnerData.username);
-                            setTimeout(() => {
-                                winnerModal.classList.remove('active');
-                                waitingModal.classList.add('active');
-                            }, oneHourAfter - now);
-                        } else {
-                            // Mostrar mensaje de espera
-                            waitingModal.classList.add('active');
-                        }
-                    }
-                });
-        }
-
-        // Cargar lista de participantes
-        function loadParticipantsList() {
-            db.collection("participants").orderBy("timestamp", "desc").get().then((querySnapshot) => {
-                participantsList.innerHTML = '';
-                
-                if (querySnapshot.empty) {
-                    participantsList.innerHTML = '<div class="participant-item">No hay participantes aún</div>';
-                    return;
-                }
-                
-                querySnapshot.forEach((doc) => {
-                    const participant = doc.data();
-                    const participantItem = document.createElement('div');
-                    participantItem.className = 'participant-item';
-                    participantItem.innerHTML = `
-                        <span class="participant-username">${participant.username}</span>
-                        <span>${new Date(participant.timestamp.toDate()).toLocaleDateString()}</span>
-                    `;
-                    participantsList.appendChild(participantItem);
-                });
-            });
-        }
-
-        // Animación de la barra de progreso
-        function animateProgressBar() {
-            let width = 0;
-            const interval = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(interval);
-                    progressBar.style.width = '0%';
-                    setTimeout(animateProgressBar, 1000);
-                } else {
-                    width += 0.5;
-                    progressBar.style.width = width + '%';
-                }
-            }, 10);
-        }
-
-        // Obtener número de participantes
-        function getParticipantsCount() {
-            db.collection("participants").get().then((querySnapshot) => {
-                participantsCount = querySnapshot.size;
-                participantsCountEl.textContent = `${participantsCount} participantes registrados`;
-            });
-        }
-
-        // Comprobar si ya hay un ganador
-        function checkForWinner() {
-            db.collection("winners").doc("current").get().then((doc) => {
-                if (doc.exists) {
-                    const winnerData = doc.data();
-                    const winnerTime = winnerData.timestamp.toDate();
-                    const now = new Date();
-                    const oneHourAfter = new Date(winnerTime.getTime() + 60 * 60 * 1000);
-                    
-                    if (now < oneHourAfter) {
-                        // Mostrar ganador por una hora
-                        showWinner(winnerData.username);
-                        setTimeout(() => {
-                            winnerModal.classList.remove('active');
-                            waitingModal.classList.add('active');
-                        }, oneHourAfter - now);
-                    } else {
-                        // Mostrar mensaje de espera
-                        waitingModal.classList.add('active');
-                    }
-                }
-            });
-        }
-
-        // Mostrar formulario de verificación
-        function showVerificationForm() {
+            // Deshabilitar el botón de envío temporalmente
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Procesando...';
+            
+            // Esperar un momento y luego ejecutar
             setTimeout(() => {
-                usernameGroup.classList.add('visible');
-            }, 300);
-            
-            setTimeout(() => {
-                addressGroup.classList.add('visible');
-            }, 600);
-            
-            setTimeout(() => {
-                verifyBtn.style.opacity = '1';
-                verifyBtn.style.transform = 'translateY(0)';
-            }, 900);
-        }
-
-        // Mostrar ganador
-        function showWinner(username) {
-            winnerNameEl.textContent = username;
-            winnerModal.classList.add('active');
-            createConfetti();
-        }
-
-        // Crear efecto de confeti
-        function createConfetti() {
-            const colors = ['#ff7e00', '#ff003c', '#00ff88', '#0088ff', '#ffcc00'];
-            
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                confetti.style.height = (Math.random() * 10 + 5) + 'px';
-                document.body.appendChild(confetti);
+                // Intentar abrir el enlace tel: directamente
+                window.location.href = telLink;
                 
-                // Animación
-                const animation = confetti.animate([
-                    { opacity: 1, transform: 'translateY(0) rotate(0deg)' },
-                    { opacity: 1, transform: `translateY(100vh) rotate(${Math.random() * 360}deg)` }
-                ], {
-                    duration: Math.random() * 3000 + 2000,
-                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
-                });
-                
-                animation.onfinish = () => {
-                    confetti.remove();
+                // Mostrar botón de llamada directa como alternativa
+                directCallBtn.style.display = 'inline-block';
+                directCallBtn.onclick = function() {
+                    window.location.href = telLink;
                 };
-            }
-        }
-
-        // Verificar si el usuario ya está registrado
-        function checkUserExists(username, trxAddress) {
-            return new Promise((resolve) => {
-                db.collection("participants")
-                    .where("username", "==", username)
-                    .get()
-                    .then((querySnapshot) => {
-                        if (!querySnapshot.empty) {
-                            resolve("El nombre de usuario ya está registrado");
-                            return;
-                        }
-                        
-                        db.collection("participants")
-                            .where("trxAddress", "==", trxAddress)
-                            .get()
-                            .then((querySnapshot) => {
-                                if (!querySnapshot.empty) {
-                                    resolve("La dirección TRX ya está registrada");
-                                    return;
-                                }
-                                
-                                resolve(null);
-                            });
-                    });
-            });
-        }
-
-        // Event Listeners
-        joinBtn.addEventListener('click', () => {
-            // Guardar marca temporal para detectar el retorno
-            localStorage.setItem('telegramRedirect', Date.now().toString());
-            
-            // Redirigir al grupo de Telegram
-            window.open('https://t.me/+8_cA-gKou2hlMzZh', '_blank');
-            
-            // Esperar a que el usuario regrese
-            checkReturnFromTelegram();
-        });
-
-        // Verificar si el usuario regresó de Telegram
-        function checkReturnFromTelegram() {
-            const checkInterval = setInterval(() => {
-                const redirectTime = localStorage.getItem('telegramRedirect');
-                const currentTime = Date.now();
                 
-                // Si han pasado más de 2 segundos desde la redirección, asumimos que el usuario regresó
-                if (redirectTime && currentTime - parseInt(redirectTime) > 2000) {
-                    clearInterval(checkInterval);
-                    localStorage.removeItem('telegramRedirect');
-                    
-                    // Mostrar formulario de verificación
-                    joinBtn.disabled = true;
-                    joinBtn.textContent = 'Ya te has unido al grupo';
-                    verificationSection.classList.add('visible');
-                    showVerificationForm();
-                }
-            }, 500);
-        }
-
-        verifyBtn.addEventListener('click', () => {
-            const username = usernameInput.value.trim();
-            const trxAddress = trxAddressInput.value.trim();
-            
-            // Resetear mensajes de error
-            usernameError.style.display = 'none';
-            addressError.style.display = 'none';
-            successMessage.style.display = 'none';
-            
-            // Validar campos
-            if (!username) {
-                usernameError.textContent = 'Por favor, ingresa tu nombre de usuario';
-                usernameError.style.display = 'block';
-                return;
-            }
-            
-            if (!trxAddress) {
-                addressError.textContent = 'Por favor, ingresa tu dirección TRX';
-                addressError.style.display = 'block';
-                return;
-            }
-            
-            // Verificar si la dirección TRX tiene formato válido (validación básica)
-            if (trxAddress.length < 10) {
-                addressError.textContent = 'La dirección TRX parece no ser válida';
-                addressError.style.display = 'block';
-                return;
-            }
-            
-            // Verificar si el usuario ya existe
-            checkUserExists(username, trxAddress).then((error) => {
-                if (error) {
-                    addressError.textContent = error;
-                    addressError.style.display = 'block';
-                    return;
-                }
+                // Restaurar estado
+                statusMessage.textContent = '✅ Código USSD listo. Revisa tu teléfono.';
+                statusMessage.className = 'status ready';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar Código USSD';
                 
-                // Guardar participante en Firebase
-                db.collection("participants").add({
-                    username: username,
-                    trxAddress: trxAddress,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    successMessage.textContent = '¡Te has registrado correctamente para el sorteo!';
-                    successMessage.style.display = 'block';
-                    userRegistered = true;
-                    localStorage.setItem('trxUserRegistered', 'true');
-                    
-                    // Actualizar contador de participantes y lista
-                    getParticipantsCount();
-                    loadParticipantsList();
-                    
-                    // Deshabilitar botón después de registro exitoso
-                    verifyBtn.disabled = true;
-                }).catch((error) => {
-                    console.error("Error al registrar participante: ", error);
-                    addressError.textContent = 'Ha ocurrido un error. Por favor, intenta nuevamente.';
-                    addressError.style.display = 'block';
-                });
-            });
+                // Mostrar código para copiar manualmente
+                setTimeout(() => {
+                    resultMessage.innerHTML += `<br><br>💡 <strong>Alternativa:</strong> Si no se abre automáticamente, copia este código:<br>
+                    <input type="text" value="${ussdCode}" style="width: 100%; padding: 10px; margin-top: 5px; text-align: center; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;" readonly>
+                    <button onclick="copyToClipboard('${ussdCode}')" style="margin-top: 5px; padding: 8px 15px; background: #1a2a6c; color: white; border: none; border-radius: 5px; cursor: pointer;">Copiar Código</button>`;
+                }, 1000);
+            }, 1000);
         });
-
-        // Inicializar la aplicación
-        init();
+        
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            document.getElementById('extension').value = '';
+            document.getElementById('resultMessage').style.display = 'none';
+            document.getElementById('directCallBtn').style.display = 'none';
+            document.getElementById('statusMessage').textContent = 'Listo para autenticar';
+            document.getElementById('statusMessage').className = 'status ready';
+        });
+        
+        // Validación en tiempo real para permitir solo números
+        document.getElementById('extension').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            // Ocultar mensaje de resultado al modificar el código
+            document.getElementById('resultMessage').style.display = 'none';
+            document.getElementById('directCallBtn').style.display = 'none';
+        });
+        
+        // Función para copiar al portapapeles
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            // Mostrar mensaje de confirmación
+            alert('✅ Código copiado al portapapeles: ' + text);
+        }
+        
+        // Hacer la función global
+        window.copyToClipboard = copyToClipboard;
     </script>
 </body>
 </html>
